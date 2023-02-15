@@ -10,20 +10,13 @@ Note Takes
   - [License](#License)
 
   ## Description
-  An application built with Node.js command-line that helps you create an HTML file with information about employees on a software engineering team.
+
 
   ## Usage
-  In this screenshot you can see the options the application runs.
-  ![Example of application](assets/Screenshot%202023-02-13%20at%2010.22.15%20PM.png)
-
-  And here, you can see the index.html file created with the answers in it.
-  ![Example of index.html generated](assets/Screenshot%202023-02-13%20at%2010.23.57%20PM.png)
-
+  
   ## Installation
   You'll need to install:
-  Inquirer
-  Fs
-  Jest
+
 
   ## Credits
   N/A
