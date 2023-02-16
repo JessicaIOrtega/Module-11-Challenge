@@ -10,13 +10,18 @@ Note Taker
   - [License](#License)
 
   ## Description
-
-
+  An application deployed with Heroku that lets you add, preview, and delete notes.
   ## Usage
-  
-  ## Installation
-  You'll need to install:
+Here are some screenshots of the application
 
+![main page](public/assets/notetaker1.png)
+
+![notes taker](public/assets/notetaker2.png)
+
+  ## Installation
+  You'll need:
+  Express.js
+  Node.js
 
   ## Credits
   N/A
