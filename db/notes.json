@@ -1,18 +1,17 @@
 [
     {
-        "title": "Test Title",
-        "text": "Test text"
+        "title": "My frist note",
+        "text": "I think it is working!",
+        "id": "9a5b"
     },
     {
-        "title": "Hi",
-        "text": "did it work?"
+        "title": "Should I delete this?",
+        "text": "maybe",
+        "id": "5320"
     },
     {
-        "title": "New note",
-        "text": "did this work?"
-    },
-    {
-        "title": "hello",
-        "text": "hi"
+        "title": "Hello there!",
+        "text": "just another try...",
+        "id": "9a99"
     }
 ]

@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const fs = require('fs');
 const notes = require('./db/notes');
+const uuid = require('./helpers/uuid');
 
 const PORT = process.env.PORT || 3001;
 
@@ -18,15 +19,12 @@ app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
-
-
 // GET request
 app.get('/api/notes', (req, res) => {
-    var options = { encoding: 'utf8', flag: 'r' };
-    res.json(JSON.parse(fs.readFileSync('./db/notes.json', options)));
+    res.json(JSON.parse(fs.readFileSync('./db/notes.json')));
 });
 
-// POST request to add a review
+// POST request to add a note and add it to html
 app.post('/api/notes', (req, res) => {
     // Log that a POST request was received
     console.info(`${req.method} request received to add a review`);
@@ -38,9 +36,10 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
+            id: uuid(),
         };
 
-        // Obtain existing reviews
+        // Obtain existing notes in notes.json
         fs.readFile('./db/notes.json', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
@@ -48,10 +47,9 @@ app.post('/api/notes', (req, res) => {
                 // Convert string into JSON object
                 const parsedNotes = JSON.parse(data);
 
-                // Add a new review
                 parsedNotes.push(newNote);
 
-                // Write updated reviews back to the file
+                // Write updated notes back to the file
                 fs.writeFile(
                     './db/notes.json',
                     JSON.stringify(parsedNotes, null, 4),
@@ -75,55 +73,48 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
+// DELETE request to delete a note by ID
+app.delete('/api/notes/:id', (req, res) => {
+
+    console.info(`${req.method} request received to delete a note`);
+
+    fs.readFile('./db/notes.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+
+            const parsedNotes = JSON.parse(data);
+
+            // new thing added, filter out the note with the specified ID
+            const filterNotes = parsedNotes.filter(note => note.id !== req.params.id);
 
 
+            if (filterNotes.length === parsedNotes.length) {
+                // No notes were filtered out, so the specified ID was not found
+                res.status(404).json('Note not found');
+            } else {
+                // Write updated notes back to the file
+                fs.writeFile(
+                    './db/notes.json',
+                    JSON.stringify(filterNotes, null, 4),
+                    (writeErr) =>
+                        writeErr
+                            ? console.error(writeErr)
+                            : console.info('Successfully deleted note!')
+                );
 
+                const response = {
+                    status: 'success',
+                    body: filterNotes,
+                };
 
+                console.log(response);
+                res.status(200).json(response);
+            }
+        }
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`);
 });
-
-
-// const notesBtn = document.getElementById('notesBtn');
-
-// const getNotes = () =>
-//     reftch('/api/notes', {
-//         method: 'GET',
-//     })
-//         .then((res) => res.json())
-//         .then((data) => data);
-
-// const buttonHandler = () =>
-//     getNotes().then(response);
-
-// notesBtn.addEventListener('click', buttonHandler);
-// const petEl = document.getElementById('pets');
-// const termButton = document.getElementById('term-btn');
-
-// const getPets = () =>
-//     fetch('/api/pets', {
-//         method: 'GET',
-//     })
-//         .then((res) => res.json())
-//         .then((data) => data);
-
-// const renderPet = (pet) => {
-//     const cardEl = document.createElement('div');
-//     const cardImageEl = document.createElement('img');
-//     const cardBodyEl = document.createElement('div');
-//     const cardBodyTitle = document.createElement('div');
-
-//     cardImageEl.classList.add('image', 'p-5');
-//     cardEl.classList.add('card', 'p-5');
-//     cardBodyEl.classList.add('card-body', 'p-5');
-//     cardBodyTitle.classList.add('card-header', 'card-title', 'link');
-
-//     cardImageEl.setAttribute('src', pet.image_url);
-//     cardBodyTitle.innerHTML = pet.name;
-//     cardBodyEl.innerText = pet.description;
-//     cardEl.appendChild(cardBodyTitle);
-//     cardEl.appendChild(cardBodyEl);
-//     cardEl.appendChild(cardImageEl);
-//     petEl.appendChild(cardEl);
-// };
