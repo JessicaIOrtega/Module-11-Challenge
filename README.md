@@ -1,5 +1,5 @@
 # Module-11-Challenge
-Note Takes
+Note Taker
 
   ## Table of Contents
   - [Description](#Description)
